@@ -265,7 +265,7 @@ struct DataType
             auto result = check_and_remove_nullable(inner_type);
             bool nullable = result.first;
             const String & real_type = result.second;
-            if (real_type == "ARRAY")
+            if (real_type == "ARRAY" || real_type.starts_with("ARRAY<"))
             {
                 type.root_type = RootDataType::ARRAY;
                 auto nested_type = parse(inner_json_object, "element");
@@ -275,7 +275,7 @@ struct DataType
                     type.clickhouse_data_type = std::make_shared<DataTypeNullable>(type.clickhouse_data_type);
                 }
             }
-            else if (real_type == "MAP")
+            else if (real_type == "MAP" || real_type.starts_with("MAP<"))
             {
                 type.root_type = RootDataType::MAP;
                 auto key_type = parse(inner_json_object, "key");
